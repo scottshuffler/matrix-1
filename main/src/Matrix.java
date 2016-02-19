@@ -86,13 +86,13 @@ public class Matrix {
 
     }
 
-    /**
-     *
-     * @param vals
-     * @param m
-     */
     public Matrix(double[] vals, int m) {
-
+        matrix = new double[m][vals.length / m];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[j][i] = vals[j];
+            }
+        }
     }
 
     /**
@@ -100,12 +100,13 @@ public class Matrix {
      */
 
     /**
-     *
-     * @param A
-     * @return
+     * @zachandrews
+     * Function that makes a copy of the 2D array A.
+     * @param A - 2D array to copy
+     * @return new Matrix object containing a copy of 2D array A
      */
     public static Matrix constructWithCopy(double[][] A) {
-        return null;
+        return new Matrix(A);
     }
 
     /**
@@ -137,19 +138,34 @@ public class Matrix {
     }
 
     /**
-     *
-     * @return
+     * @zachandrews
+     * Function that makes a copy of the internal 2-d array.
+     * @return new 2D array coppy of matrix elements
      */
     public double[][] getArrayCopy() {
-        return null;
+        double[][] internArray = new double[getRowDimension()][getColumnDimension()];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                internArray[i][j] = matrix[i][j];
+            }
+        }
+        return internArray;
     }
 
     /**
-     *
-     * @return
+     * @zachandrews
+     * Function that creates a 1D column-packed copy of internal array
+     * @return matrix elements packed in a 1D array by columns
      */
     public double[] getColumnPackedCopy() {
-        return null;
+        double[] colPacked = new double[getRowDimension() * getColumnDimension()];
+        int counter = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                colPacked[counter++] = matrix[j][i];
+            }
+        }
+        return colPacked;
     }
 
     /**
@@ -332,14 +348,19 @@ public class Matrix {
     }
 
     /**
-     *
-     * @param i0
-     * @param i1
-     * @param c
-     * @param X
+     * @zachandrews
+     * Function that sets a submatrix.
+     * @param i0 - initial row index
+     * @param i1 - final row index
+     * @param c - array of column indices
+     * @param X - matrix object used to set the field
      */
     public void setMatrix(int i0, int i1, int[] c, Matrix X) {
-
+        for (int i = i0; i <= i1; i++) {
+            for (int j = 0; j < c.length; j++) {
+                matrix[i][j] = X.matrix[i][c[j]];
+            }
+        }
     }
 
     /**
@@ -360,19 +381,41 @@ public class Matrix {
     }
 
     /**
-     *
-     * @return
+     * @zachandrews
+     * Function that provides the maximum column sum.
+     * @return the maximum column sum
      */
     public double norm1() {
-        return 0.0;
+        double sum = 0.0;
+        double max = 0.0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                sum += matrix[j][i];
+            }
+            if (sum >= max) {
+                max = sum;
+            }
+        }
+        return max;
     }
 
     /**
-     *
-     * @return
+     * @zachandrews
+     * Function that provides the maximum row sum.
+     * @return the maximum row sum
      */
     public double normInf() {
-        return 0.0;
+        double sum = 0.0;
+        double max = 0.0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                sum += matrix[i][j];
+            }
+            if (sum >= max) {
+                max = sum;
+            }
+        }
+        return max;
     }
 
     /**
@@ -428,21 +471,34 @@ public class Matrix {
     }
 
     /**
-     *
-     * @param B
-     * @return
+     * @zachandrews
+     * Function that addition on a matrix A by adding a matrix B
+     * @param B - matrix being added to A
+     * @return matrix A = A + B
      */
     public Matrix plusEquals(Matrix B) {
-        return null;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] += B.matrix[i][j];
+            }
+        }
+        return new Matrix(matrix);
     }
 
     /**
-     *
-     * @param B
-     * @return
+     * @zachandrews
+     * Function that subtracts matrix B from matrix A.
+     * @param B - matrix being subtracted from A
+     * @return - new Matrix containing the result of A - B
      */
     public Matrix minus(Matrix B) {
-        return null;
+        double[][] newMatrix = new double[getRowDimension()][getColumnDimension()];
+        for (int i = 0; i < newMatrix.length; i++) {
+            for (int j = 0; j < newMatrix[i].length; j++) {
+                newMatrix[i][j] = matrix[i][j] - B.matrix[i][j];
+            }
+        }
+        return new Matrix(newMatrix);
     }
 
     /**
@@ -516,12 +572,18 @@ public class Matrix {
     }
 
     /**
-     *
-     * @param B
-     * @return
+     * @zachandrews
+     * Function that performs element-by-element right division in place.
+     * @param B - matrix used in the division of A = A / B
+     * @return matrix that is the result of A = A / B
      */
     public Matrix arrayRightDivideEquals(Matrix B) {
-        return null;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = matrix[i][j] / B.matrix[i][j];
+            }
+        }
+        return new Matrix(matrix);
     }
 
     /**
@@ -561,21 +623,34 @@ public class Matrix {
     }
 
     /**
-     *
-     * @param s
-     * @return
+     * @zachandrews
+     * Function that multiplies a matrix A by a scalar s.
+     * @param s - scalar used for multiplication
+     * @return - new Matrix object containing the results of the multiplication
      */
     public Matrix times(double s) {
-        return null;
+        double[][] newMatrix = new double[getRowDimension()][getColumnDimension()];
+        for (int i = 0; i < newMatrix.length; i++) {
+            for (int j = 0; j < newMatrix[i].length; j++) {
+                newMatrix[i][j] = matrix[i][j] * s;
+            }
+        }
+        return new Matrix(newMatrix);
     }
 
     /**
-     *
-     * @param s
-     * @return
+     * @zachandrews
+     * Function that multiplies a matrix A by a scalar s in place.
+     * @param s - scalar used for multiplication
+     * @return matrix containing the results of the multiplication
      */
     public Matrix timesEquals(double s) {
-        return null;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] *= s;
+            }
+        }
+        return new Matrix(matrix);
     }
 
     /**
