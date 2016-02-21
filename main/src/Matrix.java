@@ -197,7 +197,7 @@ public class Matrix {
      */
     //do this
     public int getColumnDimension() {
-        return matrix.length;
+        return matrix[0].length;
     }
 
     /**
@@ -337,14 +337,21 @@ public class Matrix {
     }
 
     /**
-     *
-     * @param r
-     * @param j0
-     * @param j1
-     * @param X
+     * @chrissmith
+     * Function that sets a portion of the matrix
+     * @param r array of row indices
+     * @param j0 first column index
+     * @param j1 last column index
+     * @param X Matrix to use for setting current matrix
      */
     public void setMatrix(int[] r, int j0, int j1, Matrix X) {
-
+    	for(int i = 0; i < r.length; i++)
+    	{
+    		for(int j = j0; j <= j1; j++)
+    		{
+    			matrix[r[i]][j] = X.matrix[r[i]][j];
+    		}
+       	}
     }
 
     /**
@@ -751,9 +758,9 @@ public class Matrix {
     /**
      * @chrissmith
      * Function that prints out each item in the form x.y,
-     * where w is the max number of digits in x and
+     * where w is the column width and
      * d is the max number of digits in y.
-     * @param w number of sig. digits before the decimal place
+     * @param w column width
      * @param d number of sig. digits after the decimal place
      */
     public void print(int w, int d) {
@@ -761,25 +768,37 @@ public class Matrix {
     	{
     		for(int j = 0; j < getColumnDimension(); j++)
     		{
-    			System.out.print(String.format("%w.df ", matrix[i][j]));
+    			for(int k = 0; k < w - d - 1; k++)
+     			{
+    				System.out.print(" ");
+     			}
+    			System.out.print(String.format("%." + d + "f ", matrix[i][j]));
     		}
+    		System.out.print("\n");
     	}
     }
 
     /**
-     *
-     * @param output
-     * @param w
-     * @param d
+     * @chrissmith
+     * Function that prints the matrix to the output.
+     * @param output PrintWriter object to print to
+     * @param w column width
+     * @param d number of digits after the decimal
      */
     public void print(java.io.PrintWriter output, int w, int d) {
     	for(int i = 0; i < getRowDimension(); i++)
     	{
     		for(int j = 0; j < getColumnDimension(); j++)
     		{
-    			output.print(String.format("%w.df ", matrix[i][j]));
+    			for(int k = 0; k < w - d - 1; k++)
+    			{
+    				output.print(" ");
+    			}
+    			output.print(String.format("%." + d + "f ", matrix[i][j]));
     		}
+    		output.print("\n");
     	}
+    	output.close();
     }
 
     /**
