@@ -3,6 +3,8 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import static org.junit.Assert.*;
 
@@ -20,17 +22,20 @@ public class Testrix {
 
     @Test
     public void testConstructor2() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(3, 3, 4);
+        assertArrayEquals("Not initialized correctly.", new double[][]{{4, 4, 4}, {4, 4, 4}, {4, 4, 4}}, m.getArray());
     }
 
     @Test
     public void testConstructor3() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(initArray);
+        assertArrayEquals("Not initialized correctly.", new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, m.getArray());
     }
 
     @Test
     public void testConstructor4() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(initArray, 3, 3);
+        assertArrayEquals("Not initialized correctly.", new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, m.getArray());
     }
 
     @Test
@@ -77,7 +82,6 @@ public class Testrix {
         double[] actual = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         double[] compare = initMatrix.getRowPackedCopy();
         assertArrayEquals("Copied array not equal", actual, compare, 0);
-        //fail("Not yet implemented");
     }
 
     @Test
@@ -87,7 +91,8 @@ public class Testrix {
 
     @Test
     public void testGetColumnDimension() {
-        fail("Not yet implemented");
+        Matrix m = Matrix.random(3,3);
+        assertEquals(3.0, m.getColumnDimension(), 0.0);
     }
 
     @Test
@@ -97,7 +102,9 @@ public class Testrix {
 
     @Test
     public void testGetMatrix() {
-        fail("Not yet implemented");
+        assertArrayEquals("Get matrix with two index arrays failed",
+            new double[][]{{1, 2}, {4, 5}},
+            initMatrix.getMatrix(0, 1, 0, 1).getArrayCopy());
     }
 
     @Test
@@ -116,7 +123,9 @@ public class Testrix {
 
     @Test
     public void testGetMatrix4() {
-        fail("Not yet implemented");
+        assertArrayEquals("Get matrix with two index arrays failed",
+            new double[][]{{1, 2}, {7, 8}},
+            initMatrix.getMatrix(new int[]{0, 2}, 0, 1).getArrayCopy());
     }
 
     @Test
@@ -154,7 +163,10 @@ public class Testrix {
 
     @Test
     public void testTranspose() {
-        fail("Not yet implemented");
+        Matrix tempMatrix = new Matrix(initMatrix.getArrayCopy());
+        tempMatrix = tempMatrix.transpose();
+        double[][] correctArray = new double[][]{{1, 4, 7}, {2, 5, 8}, {3, 6, 9}};
+        assertArrayEquals("Set Matrix failed", correctArray, tempMatrix.getArray());
     }
 
     @Test
@@ -171,7 +183,9 @@ public class Testrix {
 
     @Test
     public void testNormF() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(3, 3, 3.0);
+        double normf = m.normF();
+        assertEquals(9.0, normf, 0);
     }
 
     @Test
@@ -188,7 +202,17 @@ public class Testrix {
 
     @Test
     public void testPlus() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(initMatrix.getArray());
+        Matrix s = new Matrix(new double[][]{{10,11,12},{13,14,15},{16,17,18}});
+        m = m.plus(s);
+        for(int i = 0; i < m.getRowDimension(); i++)
+        {
+            for(int j = 0; j < m.getColumnDimension(); j++)
+            {
+                assertEquals("Point " + i + " " + j + " not equal.",
+                        m.get(i, j), initMatrix.get(i, j) + s.get(i, j), 0);
+            }
+        }
     }
 
     @Test
@@ -219,7 +243,17 @@ public class Testrix {
 
     @Test
     public void testMinusEquals() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(initMatrix.getArray());
+        Matrix p = new Matrix(new double[][]{{10,11,12},{13,14,15},{16,17,18}});
+        m = m.minusEquals(p);
+        for(int i = 0; i < m.getRowDimension(); i++)
+        {
+            for(int j = 0; j < m.getColumnDimension(); j++)
+            {
+                assertEquals("Point " + i + " " + j + " not equal.",
+                        m.get(i, j), initMatrix.get(i, j) - p.get(i, j), 0);
+            }
+        }
     }
 
     @Test
@@ -324,12 +358,22 @@ public class Testrix {
 
     @Test
     public void testTimes2() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(initMatrix.getArray());
+        Matrix a = m.copy();
+        m = m.arrayTimes(initMatrix);
+        for (int i = 0; i < m.getRowDimension(); i++) {
+            for (int j = 0; j < m.getColumnDimension(); j++) {
+                assertEquals("Point " + i + " " + j + " not equal.",
+                        m.get(i, j), a.get(i, j) * initMatrix.get(i, j), 0);
+            }
+        }
     }
 
     @Test
     public void testTrace() {
-        fail("Not yet implemented");
+        Matrix m = new Matrix(3, 3, 3.0);
+        double trace = m.trace();
+        assertEquals(9.0, trace, 0);
     }
 
     @Test
@@ -346,7 +390,18 @@ public class Testrix {
 
     @Test
     public void testIdentity() {
-        fail("Not yet implemented");
+        Matrix m = Matrix.identity(3,3);
+        for(int i = 0; i < m.getRowDimension(); i++)
+        {
+            for(int j = 0; j < m.getColumnDimension(); j++)
+            {
+                if(i == j)
+                {
+                    assertEquals(1.0, 1.0, 0.0);
+                }
+                assertEquals(0.0, 0.0, 0.0);
+            }
+        }
     }
 
     @Test
@@ -370,16 +425,31 @@ public class Testrix {
 
     @Test
     public void testPrint3() throws IOException {
-        fail("Not yet implemented");
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        NumberFormat d = new DecimalFormat("#.00");
+        initMatrix.print(d, 4);
+        String output = " 1.00  2.00  3.00 \n 4.00  5.00  6.00 \n 7.00  8.00  9.00 \n";
+
+        assertEquals(output, outContent.toString());
     }
 
     @Test
-    public void testPrint4() {
-        fail("Not yet implemented");
+    public void testPrint4() throws IOException {
+        StringWriter a = new StringWriter();
+        PrintWriter b = new PrintWriter("test.txt", "UTF-8");
+        NumberFormat d = new DecimalFormat("#.00");
+        initMatrix.print(b, d, 2);
+        a.write("1.00 2.00 3.00 \n4.00 5.00 6.00 \n7.00 8.00 9.00 \n");
+        assertEquals(a.toString(), new String(Files.readAllBytes(Paths.get("test.txt"))));
     }
 
     @Test
-    public void testRead() {
-        fail("Not yet implemented");
+    public void testRead() throws IOException{
+        PrintWriter b = new PrintWriter("test.txt", "UTF-8");
+        NumberFormat d = new DecimalFormat("#.00");
+        initMatrix.print(b, d, 2);
+        Matrix actual = Matrix.read(new BufferedReader(new FileReader("test.txt")));
+        assertArrayEquals(initMatrix.getArrayCopy(), actual.getArray());
     }
 }

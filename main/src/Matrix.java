@@ -75,7 +75,7 @@ public class Matrix {
 
     }
 
-    /*
+    /**
      * @zachandrews
      * Matrix constructor that takes in a column packed array and m rows and sets the fields of the matrix
      * @param vals - column packed array
@@ -91,9 +91,6 @@ public class Matrix {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println("Hello");
-    }
 
     /**
      * Functions
@@ -156,9 +153,9 @@ public class Matrix {
      */
     public static Matrix read(java.io.BufferedReader input) throws java.io.IOException {
 
-        input.mark(0);
+        input.mark(1000);
         String temp = input.readLine();
-        int colLen = temp.length() - temp.replaceAll(" ", "").length();
+        int colLen = temp.trim().replaceAll(" +", " ").length() - temp.replaceAll(" ", "").length() + 1;
         int rowLen = 0;
         while (temp != null) {
             rowLen++;
@@ -178,7 +175,8 @@ public class Matrix {
             temp = input.readLine();
             j++;
         }
-        return null;
+        input.close();
+        return new Matrix(newMatrix);
     }
 
     /**
@@ -264,7 +262,6 @@ public class Matrix {
     /**
      * @return
      */
-    //do this
     public int getColumnDimension() {
         return matrix[0].length;
     }
@@ -765,7 +762,7 @@ public class Matrix {
                 for (int k = 0; k < width - format.getMaximumFractionDigits() - 1; k++) {
                     System.out.print(" ");
                 }
-                System.out.print(format.format(matrix[i][j]));
+                System.out.print(format.format(matrix[i][j])+ " ");
             }
             System.out.print("\n");
         }
@@ -784,9 +781,10 @@ public class Matrix {
                 for (int k = 0; k < width - format.getMaximumFractionDigits() - 1; k++) {
                     output.print(" ");
                 }
-                output.print(format.format(matrix[i][j]));
+                output.print(format.format(matrix[i][j]) + " ");
             }
             output.print("\n");
         }
+        output.close();
     }
 }
