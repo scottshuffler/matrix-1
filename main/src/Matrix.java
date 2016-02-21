@@ -180,13 +180,14 @@ public class Matrix {
      * @return
      */
     public double[] getRowPackedCopy() {
-        double[] rowpacked = new double[getRowDimension() * getColumnDimension()];
-        for (int i = 0; i > matrix.length; i++) {
+        double[] row_packed = new double[getRowDimension() * getColumnDimension()];
+        int counter = 0;
+        for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                rowpacked[j] = matrix[i][j];
+                row_packed[counter++] = matrix[i][j];
             }
         }
-        return rowpacked;
+        return row_packed;
     }
 
     /**
@@ -845,7 +846,7 @@ public class Matrix {
                 }
                 output.print(format.format(matrix[i][j]));
             }
-            output.println();
+            output.println("");
         }
     }
 

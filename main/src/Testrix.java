@@ -1,14 +1,10 @@
-import static org.junit.Assert.*;
+import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 
 public class Testrix {
@@ -61,7 +57,7 @@ public class Testrix {
 	
 	@Test
 	public void testGetArray() {
-		fail("Not yet implemented");
+        assertArrayEquals("Get array failed", new double[][]{{1,2,3}, {4,5,6}, {7,8,9}}, initMatrix.getArray());
 	}
 	
 	@Test
@@ -78,7 +74,10 @@ public class Testrix {
 	
 	@Test
 	public void testgetRowPackedCopy() {
-		fail("Not yet implemented");
+		double [] actual = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+		double[] compare = initMatrix.getRowPackedCopy();
+		assertArrayEquals("Copied array not equal", actual, compare, 0);
+		//fail("Not yet implemented");
 	}
 	
 	@Test
