@@ -26,3 +26,5 @@ Devin **S**ink, Zach **A**ndrews, Scott **S**huffler, and Chris **S**mith
 
 Devin **S**ink, Zach **A**ndrews, Chris **S**mith, and Scott **S**huffler
 
+###Testing
+This is discussed briefly in TESTING.txt.  Basically, there is a JUnit test for each function.
