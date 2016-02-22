@@ -1,0 +1,4 @@
+In order to view testing results, you need to run the JUnit tests inside of the Testrix.java file.  
+There are 50 tests, one for each method created inside of Matrix.java.  This was the most efficient
+way for us to test our class, as doing this enables us to test each function with appropriate inputs.
+The desired output was received in each case.  All 50 tests passed.
